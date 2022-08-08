@@ -1,0 +1,61 @@
+using Core.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+namespace BusinessLogic
+{
+    public class Delete
+    {
+        //private readonly IFolderManager _folderManager;
+
+        DirectoryInfo dirInfo;
+
+        //public DeleteCatalog()
+        //{
+        //    _folderManager = new IFolderManager();
+        //}
+
+        //void DeleteAllCatalog(string path)
+        //{
+        //    var folderToDeleteList = new List<string>();
+
+        //    foreach(var folderToDelete in folderToDeleteList)
+        //    {
+        //        //DeleteCatalogByPath(path + folderToDelete);
+        //    }
+        //}
+
+        public void DeleteCatalog(string path)
+        {
+            dirInfo = new DirectoryInfo(path);
+            if (dirInfo.Exists)
+            {
+                dirInfo.Delete(true);
+                Console.WriteLine("Каталог удален");
+            }
+            else
+            {
+                Console.WriteLine("Каталог не существует");
+            }
+        }
+
+        public void DeleteFile(string path)
+        {
+            FileInfo fileInf = new FileInfo(path);
+            if (fileInf.Exists)
+            {
+                fileInf.Delete();
+                Console.WriteLine("Файл удален");
+            }
+            else
+            {
+                Console.WriteLine("Файл не существует");
+            }
+        }
+
+
+
+    }
+}
