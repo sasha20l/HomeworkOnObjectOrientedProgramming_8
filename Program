@@ -1,181 +1,252 @@
+using BusinessLogic;
 using System;
 
-namespace HomeworkOnObjectOrientedProgramming_7
+namespace HomeworkOnObjectOrientedProgramming_8
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var aCoder = new ACoder();
-            string str = aCoder.Encode("мама мыла раму");
-            Console.WriteLine(str);
-            str = aCoder.Decode(str);
-            Console.WriteLine(str);
-
-
-            var bCoder = new BCoder();
-            str = bCoder.Encode("мама мыла раму");
-            Console.WriteLine(str);
-            str = bCoder.Decode(str);
-            Console.WriteLine(str);
-
+            var start = new Start();
+            start.start();
         }
     }
 
-    interface ICoder
-    {
-        string Encode(string line);
-        string Decode(string line);
-    }
+   class Start
+   {
 
-    class ACoder : ICoder
-    {
+        Copy copy = new Copy();
+        Create create = new Create();
+        Delete delete = new Delete();
+        SearchingFile searchingFiles = new SearchingFile();
+        ShowCatalog showCatalog = new ShowCatalog();
+        TextFileStatistics textFileStatistics = new TextFileStatistics();
+        СalculateSize calculateSize = new СalculateSize();
 
-        char[] alphabet = ("абвгдеёжзийклмнопрстуфцхцчшщъыьэюя ").ToCharArray();
-
-
-        public string Decode(string line)
+        public void start()
         {
-            char[] lettersFromString = line.ToCharArray();
-            string newLine = "";
-            foreach (char letter in lettersFromString)
+            View();
+
+            while (true)
             {
-                newLine += decodingFindingReplacingLetter(letter);
+                var input = InputConsole();
+
+                if (input == "Show") Showt();//показать файлы
+                else if (input == "Create folder") CreateFolder();//создать папки
+                else if (input == "Create file") CreateFile();//создать файлы
+                else if (input == "Delete folder") DeleteFolder();//удалить папки
+                else if (input == "Delete file") DeleteFile();//удалить файлы
+                else if (input == "Rename folder") RenameFolder();//переименовать папки 
+                else if (input == "Rename file") RenameFile();//переименовать файлы
+                else if (input == "Copy file") CopyFile();//копировать файлы
+                else if (input == "Movie folder") MovieFolder();//перенести папку
+                else if (input == "Movie file") MovieFile();//перенести файл
+                else if (input == "Size folder") SizeFolder();//размер папки
+                else if (input == "Size file") SizeFile();//размер файла
+                else if (input == "Search folder") SearchingFolder();//поиск папки
+                else if (input == "Search file") SearchingFile();//поиск файла
+                else if (input == "Exit") Environment.Exit(0);
+
             }
-            return newLine;
         }
 
-        public string Encode(string line)
-        {
-            char[] lettersFromString = line.ToCharArray();
-            string newLine = "";
-            foreach (char letter in lettersFromString)
-            {
-                newLine += encipheringFindingReplacingLetter(letter);
-            }
-            return newLine;
-        }
-
-        char encipheringFindingReplacingLetter(char letter)
-        {
-            int indexFoundLetter = -1;
-
-            foreach (char currentLetter in alphabet)
-            {
-                indexFoundLetter++;
-                if (letter == currentLetter)
-                {
-                    return encipheringReplacingLetter(letter, indexFoundLetter);
-                }
-            }
-            return letter;
-        }
-
-        char encipheringReplacingLetter(char letter, int indexFoundLetter)
+        void View()
         {
 
-            if ("я"[0] == letter) return alphabet[0];
-            if (" "[0] == letter) return alphabet[34];
-            return alphabet[indexFoundLetter + 1];
+            Console.WriteLine("Show - показать файлы и папки" +
+            "\nCreate folder - создать папки" +
+            "\nCreate file - создать файлы" +
+            "\nDelete folder - удалить папки" +
+            "\nDelete file - удалить файлы" + 
+            "\nRename folder - переименовать папки" +
+            "\nRename file - переименовать файлы" +
+            "\nCopy folder - копировать папки" +
+            "\nCopy file - копировать файлы" +
+            "\nSize folder - размер папки" +
+            "\nSize file - размер файла" +
+            "\nSearch folder - поиск папки" +
+            "\nSearch file - поиск файла" +
+            "\nExit - выход" +
+            "\nMovie folder - копировать файлы" +
+            "\nMovie file - копировать файлы");
+
         }
 
-        char decodingFindingReplacingLetter(char letter)
+        string  InputConsole()
         {
-            int indexFoundLetter = -1;
-
-            foreach (char currentLetter in alphabet)
-            {
-                indexFoundLetter++;
-                if (letter == currentLetter)
-                {
-                    return decodingReplacingLetter(letter, indexFoundLetter);
-                }
-            }
-            return letter;
+            return Console.ReadLine();
         }
 
-        char decodingReplacingLetter(char letter, int indexFoundLetter)
+        void Showt() 
         {
-            if ("а"[0] == letter) return alphabet[32];
+            Console.WriteLine("Укажите путь в формате C:\\");
+            showCatalog.ShowAllFilesInCatalog(InputConsole());
 
-            if (" "[0] == letter) return alphabet[34];
-
-            return alphabet[indexFoundLetter - 1];
+            View();
         }
-    }
 
-
-    class BCoder : ICoder
-    {
-        char[] alphabet = ("абвгдеёжзийклмнопрстуфцхцчшщъыьэюя ").ToCharArray();
-
-
-        public string Decode(string line)
+        void CreateFolder()
         {
-            char[] lettersFromString = line.ToCharArray();
-            string newLine = "";
-            foreach (char letter in lettersFromString)
-            {
-                newLine += decodingFindingReplacingLetter(letter);
-            }
-            return newLine;
+            Console.WriteLine("Укажите путь где создать каталог в формате C:\\");
+            var path = InputConsole();
+            Console.WriteLine("Укажите название каталога");
+            var subPath = InputConsole();
+
+            create.CreateCatalog(path, subPath);
+
+            View();
         }
 
-        public string Encode(string line)
+        void CreateFile()
         {
-            char[] lettersFromString = line.ToCharArray();
-            string newLine = "";
-            foreach (char letter in lettersFromString)
-            {
-                newLine += encipheringFindingReplacingLetter(letter);
-            }
-            return newLine;
+            Console.WriteLine("Укажите путь где создать файл в формате C:\\name.docx");
+            var path = InputConsole();
+
+            create.CreateFile(path);
+
+            View();
         }
 
-        char encipheringFindingReplacingLetter(char letter)
+        void DeleteFolder()
         {
-            int indexFoundLetter = -1;
+            Console.WriteLine("Укажите каталог для удаления в формате C:\\name");
+            var path = InputConsole();
 
-            foreach (char currentLetter in alphabet)
-            {
-                indexFoundLetter++;
-                if (letter == currentLetter)
-                {
-                    return encipheringReplacingLetter(letter, indexFoundLetter);
-                }
-            }
-            return letter;
+            delete.DeleteCatalog(path);
+
+            View();
         }
 
-        char encipheringReplacingLetter(char letter, int indexFoundLetter)
+        void DeleteFile()
+        {
+            Console.WriteLine("Укажите файл для удаления в формате C:\\name.docx");
+            var path = InputConsole();
+
+            delete.DeleteFile(path);
+
+            View();
+        }
+
+        void CopyFile()
         {
 
-            if (" "[0] == letter) return alphabet[34];
+            Console.WriteLine("Укажите путь откуда копировать файл в формате C:\\name.txt");
+            var path = InputConsole();
+            Console.WriteLine("Укажите путь куда вставить файл в формате C:\\NewDirectory\\name.txt");
+            var subPath = InputConsole();
 
-            indexFoundLetter = 33 - indexFoundLetter;
-            return alphabet[indexFoundLetter];
+            copy.CopyFile(path, subPath);
+
+            View();
         }
 
-        char decodingFindingReplacingLetter(char letter)
+        void MovieFolder()
         {
-            int indexFoundLetter = -1;
 
-            foreach (char currentLetter in alphabet)
-            {
-                indexFoundLetter++;
-                if (letter == currentLetter)
-                {
-                    return decodingReplacingLetter(letter, indexFoundLetter);
-                }
-            }
-            return letter;
+            Console.WriteLine("Укажите путь откуда перенести папку в формате C:\\name");
+            var path = InputConsole();
+            Console.WriteLine("Укажите путь куда перенести папку в формате C:\\NewDirectory\\name");
+            var subPath = InputConsole();
+
+            copy.MovieCatalog(path, subPath);
+
+            View();
         }
 
-        char decodingReplacingLetter(char letter, int indexFoundLetter)
+        void MovieFile()
         {
-            if (" "[0] == letter) return alphabet[34];
-            indexFoundLetter = ((33 - indexFoundLetter));
-            return alphabet[indexFoundLetter];
+
+            Console.WriteLine("Укажите путь откуда вырезать файл в формате C:\\name.txt");
+            var path = InputConsole();
+            Console.WriteLine("Укажите путь куда вставить файл в формате C:\\NewDirectory\\name.txt");
+            var subPath = InputConsole();
+
+            copy.MovieFile(path, subPath);
+
+            View();
         }
+
+        void RenameFolder()
+        {
+
+            Console.WriteLine("Укажите путь где переименовать папку в формате C:\\name");
+            var path = InputConsole();
+            Console.WriteLine("Укажите новое имя");
+            var subPath = InputConsole();
+
+            var path2 = path.Substring(0, path.LastIndexOf("\\"));
+
+            copy.MovieCatalog(path, path2 + "\\" + subPath);
+
+            View();
+        }
+
+        void RenameFile()
+        {
+
+            Console.WriteLine("Укажите путь где переименовать файл в формате C:\\name.docx");
+            var path = InputConsole();
+            Console.WriteLine("Укажите новое имя в формате name.docx");
+            var subPath = InputConsole();
+
+            var path2 = path.Substring(0, path.LastIndexOf("\\"));
+
+            copy.MovieFile(path, path2 + "\\" + subPath);
+
+            View();
+        }
+
+        void SizeFolder()
+        {
+
+            Console.WriteLine("Укажите путь папки в формате C:\\name");
+            var path = InputConsole();
+
+            calculateSize.SizeCatalog(path);
+
+            View();
+        }
+
+        void SizeFile()
+        {
+
+            Console.WriteLine("Укажите путь файла в формате C:\\name.docx");
+            var path = InputConsole();
+
+            calculateSize.SizeFile(path);
+
+            View();
+        }
+
+        void SearchingFolder()
+        {
+
+            Console.WriteLine("Укажите путь где начать поиск папки в формате C:\\name");
+            var path = InputConsole();
+            Console.WriteLine("Укажите название папки в формате books*. где * любое количество символов");
+            var name = InputConsole();
+
+            searchingFiles.findingFolder(path, name);
+
+            View();
+        }
+
+        void SearchingFile()
+        {
+
+            Console.WriteLine("Укажите путь где начать поиск файла в формате C:\\name.txt");
+            var path = InputConsole();
+            Console.WriteLine("Укажите название файла в формате *.exe где * любое количество символов");
+            var name = InputConsole();
+
+            searchingFiles.searchOfTheFile(path, name);
+
+            View();
+        }
+
     }
 }
+
+
+
+
